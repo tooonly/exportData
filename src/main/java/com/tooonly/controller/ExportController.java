@@ -1,18 +1,15 @@
 package com.tooonly.controller;
 
 import com.tooonly.build.SQLSyntaxParsing;
-import com.tooonly.dao.IQueryDao;
-import com.tooonly.service.QueryService;
+import com.tooonly.service.impl.QueryService;
 import com.tooonly.util.ExcleImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,16 +17,17 @@ import java.util.List;
 @RequestMapping("/export")
 public class ExportController {
 
-    @Resource
+    @Resource(name = "queryService")
     private QueryService queryService;
 
     @RequestMapping("/excel")
     @ResponseBody
     public String exportExcel(String sql, HttpServletResponse response) throws Exception {
-        ServletOutputStream out = response.getOutputStream();
+        sql = URLDecoder.decode(sql,"utf-8");
         List<HashMap> datas = queryService.getDatas(sql);
         String[] fields = SQLSyntaxParsing.getField(sql);
-        ExcleImpl.export(fields,fields,datas,out);
+        String tableName = SQLSyntaxParsing.getTableName(sql);
+        ExcleImpl.export(tableName,fields,fields,datas,response);
         return "你好！";
     }
 

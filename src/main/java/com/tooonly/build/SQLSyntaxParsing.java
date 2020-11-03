@@ -12,4 +12,12 @@ public class SQLSyntaxParsing {
         }
         return fields;
     }
+
+    public static String getTableName(String sql){
+        return sql.split("from")[1].trim().split(" ")[0];
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getTableName("select%20strLoginId,strMobile,strName,strIdentity%20from%20tbLender%20limit%2010"));
+    }
 }
