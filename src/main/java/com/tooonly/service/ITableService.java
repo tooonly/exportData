@@ -1,5 +1,8 @@
 package com.tooonly.service;
 
+import com.tooonly.bean.ColumnInfo;
+import com.tooonly.bean.TableInfo;
+
 public interface ITableService {
 
     /**
@@ -9,6 +12,14 @@ public interface ITableService {
      * @return
      */
     String getColumnComment(String tableName,String columnName);
+
+    /**
+     * 获取多个字段的备注
+     * @param tableName
+     * @param columnNames
+     * @return
+     */
+    String[] getColumnComment(String tableName,String...columnNames);
 
     /**
      * 获取表格备注
@@ -21,14 +32,14 @@ public interface ITableService {
      * 获取所有表信息
      * @return
      */
-    String getTableInfos();
+    TableInfo[] getTableInfos();
 
     /**
      * 获取某个表的字段信息
      * @param tableName
      * @return
      */
-    String getColumnInfoByTable(String tableName);
+    ColumnInfo getColumnInfoByName(String tableName, String columnName);
 
 
 }

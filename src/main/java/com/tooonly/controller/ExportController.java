@@ -1,6 +1,7 @@
 package com.tooonly.controller;
 
 import com.tooonly.build.SQLSyntaxParsing;
+import com.tooonly.service.ITableService;
 import com.tooonly.service.impl.QueryService;
 import com.tooonly.util.ExcleImpl;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,9 @@ public class ExportController {
     @Resource(name = "queryService")
     private QueryService queryService;
 
+    @Resource
+    private ITableService tableService;
+
     @RequestMapping("/excel")
     @ResponseBody
     public String exportExcel(String sql, HttpServletResponse response) throws Exception {
@@ -27,7 +31,8 @@ public class ExportController {
         List<HashMap> datas = queryService.getDatas(sql);
         String[] fields = SQLSyntaxParsing.getField(sql);
         String tableName = SQLSyntaxParsing.getTableName(sql);
-        ExcleImpl.export(tableName,fields,fields,datas,response);
+        String[] filedsComment = tableService.getColumnComment(tableName,fields);
+        ExcleImpl.export(tableName,filedsComment,fields,datas,response);
         return "你好！";
     }
 

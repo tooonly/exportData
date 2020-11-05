@@ -7,6 +7,8 @@ public class TableInfo {
 
     private String tableCatalog;
 
+    private String tableComment;
+
     private String tableName;
 
     private String tableSchema;
@@ -45,6 +47,14 @@ public class TableInfo {
 
     public void setTableCatalog(String tableCatalog) {
         this.tableCatalog = tableCatalog;
+    }
+
+    public String getTableComment() {
+        return tableComment;
+    }
+
+    public void setTableComment(String tableComment) {
+        this.tableComment = tableComment;
     }
 
     public String getTableName() {
@@ -179,6 +189,7 @@ public class TableInfo {
     public String toString() {
         return "TableInfo{" +
                 "tableCatalog='" + tableCatalog + '\'' +
+                ", tableComment='" + tableComment + '\'' +
                 ", tableName='" + tableName + '\'' +
                 ", tableSchema='" + tableSchema + '\'' +
                 ", engine='" + engine + '\'' +
