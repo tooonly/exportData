@@ -2,11 +2,11 @@ package com.tooonly.util.security;
 
 import java.util.ArrayList;
 
-abstract class AES {
-    abstract byte[] encode(byte[] bysContent);
-    abstract String encode(String strText);
-    abstract byte[] decode(byte[] bysEncoded);
-    abstract String decode(String strEncoded);
+public abstract class AES {
+    public abstract byte[] encode(byte[] bysContent);
+    public abstract String encode(String strText);
+    public abstract byte[] decode(byte[] bysEncoded);
+    public abstract String decode(String strEncoded);
     public static String[] splitString(String strSource, char chSeperator) {
         ArrayList alOutput = new ArrayList();
         StringBuilder strbString = new StringBuilder();

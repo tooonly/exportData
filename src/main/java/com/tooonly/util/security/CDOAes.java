@@ -161,6 +161,8 @@ public class CDOAes extends AES {
         AES aes = new CDOAes();
         String decode = aes.decode("M+7GIizh/QseV4kp1+lbF47V6/puD1ikwEXAEUJ7gLs=");
         System.out.println(decode);
+        System.out.println(aes.encode("130821197108233161"));
+        System.out.println(aes.encode("130228195611114621"));
     }
 }
 

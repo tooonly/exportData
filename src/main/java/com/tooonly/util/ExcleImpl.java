@@ -1,5 +1,7 @@
 package com.tooonly.util;
 
+import com.tooonly.util.security.AES;
+import com.tooonly.util.security.CDOAes;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -10,11 +12,12 @@ import java.io.*;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 
 public class ExcleImpl {
 
-    public static void export(String tableName,String[] heads, String[] bodyNames, List<HashMap> datas, HttpServletResponse response) throws Exception{
+    public static void export(String tableName, String[] heads, String[] bodyNames, List<HashMap> datas, Set<String> decodes, HttpServletResponse response) throws Exception{
         // 第一步，创建一个workbook，对应一个Excel文件
         Workbook workbook = new XSSFWorkbook ();
         // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet
@@ -27,7 +30,7 @@ public class ExcleImpl {
         //第五步，创建表头
         createHead(heads,hssfSheet,hssfCellStyle);
         //第六步，填充数据
-        createBodys(bodyNames,datas,hssfSheet);
+        createBodys(bodyNames,datas,decodes,hssfSheet);
         // 第七步，将文件输出到客户端浏览器
         String fileName = tableName+".xlsx";
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -73,21 +76,25 @@ public class ExcleImpl {
         }
     }
 
-    private static void createBodys(String[] bodyNames,List<HashMap> datas,Sheet sheet){
+    private static void createBodys(String[] bodyNames,List<HashMap> datas,Set<String> decodes,Sheet sheet){
         for (int i = 0; i < datas.size(); i++) {
             Row row = sheet.createRow(i+1);
             HashMap map = datas.get(i);
             // 第六步，创建单元格，并设置值
-            createBody(bodyNames,map,row);
+            createBody(bodyNames,map,decodes,row);
         }
 
     }
 
-    private static void createBody(String[] bodyNames,HashMap map,Row row){
+    private static void createBody(String[] bodyNames,HashMap<String,Object> map,Set<String> decodes,Row row){
         // 第六步，创建单元格，并设置值
-        for(int j = 0;j < bodyNames.length;j++){
-            String field = bodyNames[j];
-            row.createCell(j).setCellValue(map.get(field.trim())+"");
+        AES aes = new CDOAes();
+        for(int i = 0;i < bodyNames.length;i++){
+            String data = map.get(bodyNames[i])+"";
+            if(decodes.contains(bodyNames[i])){
+                data = aes.decode(data);
+            }
+            row.createCell(i).setCellValue(data);
         }
     }
 }

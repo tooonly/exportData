@@ -56,7 +56,12 @@ public class TableService implements ITableService {
      */
     @Override
     public String getColumnComment(String tableName, String columnName) {
-        return columnMap.get(tableName+"."+columnName).getColumnComment();
+        String name = tableName+"."+columnName;
+        if(!columnMap.containsKey(name)){
+            return columnName;
+        }
+        String comment = columnMap.get(name).getColumnComment();
+        return StringUtils.isBlank(comment) ? columnName : comment;
     }
 
     /**
@@ -82,7 +87,11 @@ public class TableService implements ITableService {
      */
     @Override
     public String getTableComment(String tableName) {
-        return tableMap.get(tableName).getTableComment();
+        if(!tableMap.containsKey(tableName)){
+            return tableName;
+        }
+        String tableComment = tableMap.get(tableName).getTableComment();
+        return StringUtils.isBlank(tableComment) ? tableName : tableComment;
     }
 
     /**
