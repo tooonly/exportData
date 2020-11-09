@@ -1,5 +1,6 @@
 package com.tooonly.controller;
 
+import com.tooonly.build.MySQLSyntaxParsing;
 import com.tooonly.build.SQLSyntaxParsing;
 import com.tooonly.service.ITableService;
 import com.tooonly.service.impl.QueryService;
@@ -40,8 +41,8 @@ public class ExportController {
         sql = URLDecoder.decode(sql,"utf-8");
         List<HashMap> datas = queryService.getDatas(sql);
         Assert.notEmpty(datas,"未查詢到數據");
-        String[] fields = SQLSyntaxParsing.getField(sql);
-        String tableName = SQLSyntaxParsing.getTableName(sql);
+        String[] fields = MySQLSyntaxParsing.getField(sql);
+        String tableName = MySQLSyntaxParsing.getTableName(sql);
         String[] fieldsComment = tableService.getColumnComment(tableName,fields);
         tableName = tableService.getTableComment(tableName);
         ExcleImpl.export(tableName,fieldsComment,fields,datas,decodes,response);
