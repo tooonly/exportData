@@ -2,6 +2,7 @@ package com.tooonly.controller;
 
 import com.tooonly.build.MySQLSyntaxParsing;
 import com.tooonly.build.SQLSyntaxParsing;
+import com.tooonly.build.sql.SQLConfig;
 import com.tooonly.service.ITableService;
 import com.tooonly.service.impl.QueryService;
 import com.tooonly.util.ExcleImpl;
@@ -14,10 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @RequestMapping("/export")
@@ -29,6 +27,9 @@ public class ExportController {
     @Resource
     private ITableService tableService;
 
+    @Resource(name = SQLConfig.localSQLDriver)
+    private SQLSyntaxParsing sqlSyntaxParsing;
+
     @RequestMapping("/excel")
     @ResponseBody
     public String exportExcel(String sql,String aes, HttpServletResponse response) throws Exception {
@@ -39,10 +40,10 @@ public class ExportController {
             }
         }
         sql = URLDecoder.decode(sql,"utf-8");
-        List<HashMap> datas = queryService.getDatas(sql);
+        List<LinkedHashMap> datas = queryService.getDatas(sql);
         Assert.notEmpty(datas,"未查詢到數據");
-        String[] fields = MySQLSyntaxParsing.getField(sql);
-        String tableName = MySQLSyntaxParsing.getTableName(sql);
+        String[] fields = sqlSyntaxParsing.getField(sql);
+        String tableName = sqlSyntaxParsing.getTableName(sql);
         String[] fieldsComment = tableService.getColumnComment(tableName,fields);
         tableName = tableService.getTableComment(tableName);
         ExcleImpl.export(tableName,fieldsComment,fields,datas,decodes,response);

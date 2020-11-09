@@ -3,8 +3,11 @@ package com.tooonly.dao;
 import com.tooonly.bean.ColumnInfo;
 import com.tooonly.bean.TableInfo;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.mapping.ResultMapping;
+import org.dom4j.Element;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public interface IQueryDao {
@@ -16,6 +19,9 @@ public interface IQueryDao {
     List<ColumnInfo> listTableColumn(String tableName);
 
     @Select("${sql}")
-    public List<HashMap> getExcelData(String sql);
+    public List<LinkedHashMap> getExcelData(String sql);
+
+    @Select("select * from tbLender limit 10")
+    public List<LinkedHashMap> getTestData();
 
 }
