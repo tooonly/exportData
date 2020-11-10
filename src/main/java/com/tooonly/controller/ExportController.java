@@ -1,21 +1,25 @@
 package com.tooonly.controller;
 
-import com.tooonly.build.MySQLSyntaxParsing;
+import com.tooonly.bean.Excel;
+import com.tooonly.build.method.HandleParamMethod;
 import com.tooonly.build.SQLSyntaxParsing;
+import com.tooonly.build.method.MethodHandle;
+import com.tooonly.build.method.MethodHandleEnum;
 import com.tooonly.build.sql.SQLConfig;
 import com.tooonly.service.ITableService;
 import com.tooonly.service.impl.QueryService;
 import com.tooonly.util.ExcleImpl;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/export")
@@ -32,21 +36,17 @@ public class ExportController {
 
     @RequestMapping("/excel")
     @ResponseBody
-    public String exportExcel(String sql,String aes, HttpServletResponse response) throws Exception {
-        Set<String> decodes = new HashSet<String>();
-        if(StringUtils.isNotBlank(aes)){
-            for(String decode:aes.split(",")){
-                decodes.add(decode);
-            }
-        }
+    public String exportExcel(String sql, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<String, String[]> paramMap = request.getParameterMap();
         sql = URLDecoder.decode(sql,"utf-8");
-        List<LinkedHashMap> datas = queryService.getDatas(sql);
-        Assert.notEmpty(datas,"未查詢到數據");
-        String[] fields = sqlSyntaxParsing.getField(sql);
+        List<MethodHandle> methods = HandleParamMethod.build(paramMap);
+        Excel excel = queryService.getDatas(sql,methods);
+        Assert.notNull(excel,"未查询到数据");
+        //String[] fields = sqlSyntaxParsing.getField(sql);
         String tableName = sqlSyntaxParsing.getTableName(sql);
-        String[] fieldsComment = tableService.getColumnComment(tableName,fields);
+        //String[] fieldsComment = tableService.getColumnComment(tableName,fields);
         tableName = tableService.getTableComment(tableName);
-        ExcleImpl.export(tableName,fieldsComment,fields,datas,decodes,response);
+        ExcleImpl.export(tableName,excel,response);
         return "你好！";
     }
 

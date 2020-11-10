@@ -9,6 +9,7 @@ import org.dom4j.Element;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface IQueryDao {
 
@@ -19,7 +20,7 @@ public interface IQueryDao {
     List<ColumnInfo> listTableColumn(String tableName);
 
     @Select("${sql}")
-    public List<LinkedHashMap> getExcelData(String sql);
+    public List<LinkedHashMap<String,String>> getExcelData(String sql);
 
     @Select("select * from tbLender limit 10")
     public List<LinkedHashMap> getTestData();
