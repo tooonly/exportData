@@ -1,10 +1,9 @@
 package com.tooonly.controller;
 
 import com.tooonly.bean.Excel;
-import com.tooonly.build.method.HandleParamMethod;
 import com.tooonly.build.SQLSyntaxParsing;
+import com.tooonly.build.method.HandleParamMethod;
 import com.tooonly.build.method.MethodHandle;
-import com.tooonly.build.method.MethodHandleEnum;
 import com.tooonly.build.sql.SQLConfig;
 import com.tooonly.service.ITableService;
 import com.tooonly.service.impl.QueryService;
