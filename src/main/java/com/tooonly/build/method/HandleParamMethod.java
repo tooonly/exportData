@@ -22,7 +22,7 @@ public abstract class HandleParamMethod {
             String name = entry.getKey();
             if(methodMap.containsKey(name)){
                 MethodHandle methodHandle = methodMap.get(name).getMethodHandle();
-                methodHandle.value = entry.getValue();
+                methodHandle.setValue(entry.getValue());
                 methodHandles.add(methodHandle);
             }
         }

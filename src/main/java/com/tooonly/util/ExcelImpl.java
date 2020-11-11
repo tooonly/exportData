@@ -12,7 +12,7 @@ import java.net.URLEncoder;
 import java.util.List;
 
 
-public class ExcleImpl {
+public class ExcelImpl {
 
     public static void export(String tableName, Excel excel, HttpServletResponse response) throws Exception{
         // 第一步，创建一个workbook，对应一个Excel文件

@@ -7,7 +7,7 @@ import com.tooonly.build.method.MethodHandle;
 import com.tooonly.build.sql.SQLConfig;
 import com.tooonly.service.ITableService;
 import com.tooonly.service.impl.QueryService;
-import com.tooonly.util.ExcleImpl;
+import com.tooonly.util.ExcelImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +45,7 @@ public class ExportController {
         String tableName = sqlSyntaxParsing.getTableName(sql);
         //String[] fieldsComment = tableService.getColumnComment(tableName,fields);
         tableName = tableService.getTableComment(tableName);
-        ExcleImpl.export(tableName,excel,response);
+        ExcelImpl.export(tableName,excel,response);
         return "你好！";
     }
 
