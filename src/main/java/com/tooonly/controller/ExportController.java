@@ -7,7 +7,9 @@ import com.tooonly.build.method.MethodHandle;
 import com.tooonly.build.sql.SQLConfig;
 import com.tooonly.service.ITableService;
 import com.tooonly.service.impl.QueryService;
-import com.tooonly.util.ExcelImpl;
+import com.tooonly.util.ExcelUtil;
+import com.tooonly.util.FileUtil;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +39,7 @@ public class ExportController {
     @ResponseBody
     public String exportExcel(String sql, HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, String[]> paramMap = request.getParameterMap();
-        sql = URLDecoder.decode(sql,"utf-8");
+        sql = URLDecoder.decode(sql,"utf-8").toUpperCase();
         List<MethodHandle> methods = HandleParamMethod.build(paramMap);
         Excel excel = queryService.getDatas(sql,methods);
         Assert.notNull(excel,"未查询到数据");
@@ -45,7 +47,8 @@ public class ExportController {
         String tableName = sqlSyntaxParsing.getTableName(sql);
         //String[] fieldsComment = tableService.getColumnComment(tableName,fields);
         tableName = tableService.getTableComment(tableName);
-        ExcelImpl.export(tableName,excel,response);
+        Workbook workbook = ExcelUtil.createExcel(tableName,excel);
+        FileUtil.outputExcel(response,workbook,tableName);
         return "你好！";
     }
 

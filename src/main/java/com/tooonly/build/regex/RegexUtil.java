@@ -17,7 +17,7 @@ public class RegexUtil {
     }
 
     public static void main(String[] args) {
-        String a = getLastLikeContent("select (select * from a),b from  abc left join ddd on abc.a = ddd.a where abc.a = 1 order by def limit 10","from\\s+[a-zA-Z]*?\\s+");
+        String a = getLastLikeContent("select (select * from a),b FROM  abc left join ddd on abc.a = ddd.a where abc.a = 1 order by def limit 10","FROM\\s+[a-zA-Z]*?\\s+");
         System.out.println(a);
     }
 }

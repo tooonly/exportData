@@ -12,9 +12,9 @@ import java.net.URLEncoder;
 import java.util.List;
 
 
-public class ExcelImpl {
+public class ExcelUtil {
 
-    public static void export(String tableName, Excel excel, HttpServletResponse response) throws Exception{
+    public static Workbook createExcel(String tableName, Excel excel) throws Exception{
         // 第一步，创建一个workbook，对应一个Excel文件
         Workbook workbook = new XSSFWorkbook ();
         // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet
@@ -29,38 +29,7 @@ public class ExcelImpl {
         //第六步，填充数据
         createBodys(excel.getBodys(),hssfSheet);
         // 第七步，将文件输出到客户端浏览器
-        String fileName = tableName+".xlsx";
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        workbook.write(os);
-        byte[] content = os.toByteArray();
-        InputStream is = new ByteArrayInputStream(content);
-        response.reset();
-        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8");
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName,"utf-8"));
-        response.setHeader("Content-Length", String.valueOf(is.available()));
-        response.setCharacterEncoding("UTF-8");
-        ServletOutputStream sout = response.getOutputStream();
-        BufferedInputStream bis = null;
-        BufferedOutputStream bos = null;
-        try {
-            bis = new BufferedInputStream(is);
-            bos = new BufferedOutputStream(sout);
-            byte[] buff = new byte[2048];
-            int bytesRead;
-            // Simple read/write loop.
-            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
-                bos.write(buff, 0, bytesRead);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally {
-            if (bis != null){
-                bis.close();
-            }
-            if (bos != null){
-                bos.close();
-            }
-        }
+        return workbook;
     }
 
     private static void createHead(String[] heads,Sheet sheet,CellStyle hssfCellStyle){
